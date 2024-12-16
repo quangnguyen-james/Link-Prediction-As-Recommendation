@@ -1,0 +1,6 @@
+Data format
+SOURCE, TARGET, RATING, TIME
+SOURCE: node id of source, i.e., rater
+TARGET: node id of target, i.e., ratee
+RATING: the source's rating for the target, ranging from -10 to +10 in steps of 1
+TIME: the time of the rating, measured as seconds since Epoch. (This can be converted to human readable data easily as described here)

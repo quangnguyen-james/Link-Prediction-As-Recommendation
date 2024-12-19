@@ -6,6 +6,7 @@
 
 import networkx as nx
 import os
+
 # Đường dẫn lưu đồ thị
 dataset_path = "graph"
 
@@ -29,15 +30,12 @@ for filename in os.listdir(edges_directory):
         
         # Gán ego_id cho các nút trong ego graph
         for node in ego_graph.nodes():
-            if node in node_to_ego:
-                # Nếu một nút thuộc nhiều ego, thêm vào danh sách
-                node_to_ego[node].append(ego_id)
-            else:
-                node_to_ego[node] = [ego_id]
+            if node not in node_to_ego:
+                node_to_ego[node] = ego_id  # Chỉ gán ego đầu tiên
 
 # Gán ego_id làm thuộc tính cho các nút trong đồ thị G_combined
 for node in G_combined.nodes():
-    G_combined.nodes[node]["ego"] = ",".join(map(str, node_to_ego.get(node, [])))
+    G_combined.nodes[node]["ego"] = str(node_to_ego.get(node, "None"))  # Gán giá trị ego đầu tiên hoặc "None" nếu không có
 
 # Lưu đồ thị thành file GraphML
 nx.write_graphml(G_combined, f"{dataset_path}/processed_graph.graphml")

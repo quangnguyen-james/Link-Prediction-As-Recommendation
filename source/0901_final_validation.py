@@ -37,6 +37,8 @@ try:
     # 3. Kiểm tra adjacency_matrix
     print("Đọc và kiểm tra adjacency_matrix.csv...")
     adjacency_matrix = pd.read_csv(adjacency_matrix_file, index_col=0)
+    adjacency_matrix.index = adjacency_matrix.index.astype(str) 
+    adjacency_matrix.columns = adjacency_matrix.columns.astype(str)
     print(f"- Kích thước ma trận kề: {adjacency_matrix.shape}")
     if not (adjacency_matrix.index.equals(adjacency_matrix.columns)):
         print("  ⚠️ Các hàng và cột của ma trận kề không đồng nhất!\n")
@@ -55,16 +57,20 @@ try:
     feature_nodes = set(features["source"]).union(set(features["target"]))
     embedding_nodes = set(node_embeddings.index)
 
+    # Xử lý các giá trị null trước khi thực hiện kiểm tra 
+    feature_nodes = {str(node) for node in feature_nodes if pd.notnull(node)} 
+    embedding_nodes = {str(node) for node in embedding_nodes if pd.notnull(node)}
+
     missing_in_graph = feature_nodes - graph_nodes
     missing_in_embeddings = feature_nodes - embedding_nodes
 
     print(f"- Nút trong feature nhưng không có trong ma trận kề: {len(missing_in_graph)}")
     print(f"- Nút trong feature nhưng không có trong embeddings: {len(missing_in_embeddings)}\n")
     
-    if missing_in_graph:
-        print(f"  ⚠️ Các nút thiếu trong ma trận kề: {missing_in_graph}")
-    if missing_in_embeddings:
-        print(f"  ⚠️ Các nút thiếu trong embeddings: {missing_in_embeddings}")
+    #if missing_in_graph:
+    #    print(f"  ⚠️ Các nút thiếu trong ma trận kề: {missing_in_graph}")
+    #if missing_in_embeddings:
+    #    print(f"  ⚠️ Các nút thiếu trong embeddings: {missing_in_embeddings}")
     
     print("Kiểm tra tính nhất quán hoàn tất.")
 except Exception as e:
